@@ -1,7 +1,14 @@
 package repo
 
-type BillingRepository struct{}
+import "context"
 
-func NewBillingResource() *BillingRepository {
-	return &BillingRepository{}
+type ResourceRepo interface {
+	CreateLoan(ctx context.Context)
+	SignUp(ctx context.Context)
+}
+
+type ResourceRepository struct{}
+
+func NewResource() *ResourceRepository {
+	return &ResourceRepository{}
 }

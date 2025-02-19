@@ -6,7 +6,8 @@ import (
 	"github.com/sharkx018/billing-engine/internal/constant"
 	"github.com/sharkx018/billing-engine/internal/handler"
 	"github.com/sharkx018/billing-engine/internal/repo"
-	"github.com/sharkx018/billing-engine/internal/usecase"
+	"github.com/sharkx018/billing-engine/internal/usecase/billing"
+	"github.com/sharkx018/billing-engine/internal/usecase/user"
 	"net/http"
 )
 
@@ -14,14 +15,19 @@ func main() {
 
 	fmt.Println("Billing Engine!")
 
-	billingRepo := repo.NewBillingResource()
+	dataSourceRepo := repo.NewResource()
 
-	billingUsecase := usecase.NewBillingUsecase(billingRepo)
+	billingUsecase := billing.NewBillingUsecase(dataSourceRepo)
+	userUsecase := user.NewUserUsecase(dataSourceRepo)
 
-	billingHandler := handler.NewBillingHandler(billingUsecase)
+	handler := handler.NewBillingHandler(userUsecase, billingUsecase)
 
 	router := chi.NewRouter()
-	router.Post("/create-loan", billingHandler.CreateLoanHandler)
+
+	// user
+	router.Post("/sign-up", handler.SignUpHandler)
+
+	router.Post("/create-loan", handler.CreateLoanHandler)
 
 	fmt.Printf("Billing Server Started at port %s\n", constant.ConfigPort)
 	err := http.ListenAndServe(constant.ConfigPort, router)

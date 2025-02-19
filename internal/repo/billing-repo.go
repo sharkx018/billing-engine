@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (b *BillingRepository) CreateLoan(ctx context.Context) {
+func (b *ResourceRepository) CreateLoan(ctx context.Context) {
 
 	fmt.Println("Creating Loan")
 
