@@ -1,6 +1,8 @@
 package store
 
-import "sync"
+import (
+	"sync"
+)
 
 type User struct {
 	UserID   int    `json:"user_id"`
@@ -9,13 +11,33 @@ type User struct {
 }
 
 type Loan struct {
-	LoanID         int     `json:"loan_id"`
-	UserID         int     `json:"user_id"`
-	TotalAmount    float64 `json:"total_amount"`
-	WeeklyPayment  float64 `json:"weekly_payment"`
-	Outstanding    float64 `json:"outstanding"`
-	MissedPayments int     `json:"missed_payments"`
+	LoanID          int     `json:"loan_id"`
+	UserID          int     `json:"user_id"`
+	Principal       float64 `json:"principal"`
+	Interest        float64 `json:"interest"`
+	TotalAmount     float64 `json:"total_amount"`
+	WeeklyPayment   float64 `json:"weekly_payment"`
+	Outstanding     float64 `json:"outstanding"`
+	MissedPayments  int     `json:"missed_payments"`
+	NextPaymentDate string  `json:"next_payment_date"`
+	PendingPayments int     `json:"pending_payments"`
+	EMISchedule     []EMI   `json:"emi_schedule"`
 }
+
+type EMI struct {
+	WeekNumber int       `json:"week_number"`
+	DueDate    string    `json:"due_date"`
+	Amount     float64   `json:"amount"`
+	Status     EMIStatus `json:"status"`
+}
+
+const (
+	Pending EMIStatus = "pending"
+	Paid    EMIStatus = "paid"
+	Missed  EMIStatus = "missed"
+)
+
+type EMIStatus string
 
 // Store struct to hold global variables
 type Store struct {

@@ -10,6 +10,10 @@ type ApiResponse struct {
 	Error   *CommonErrorResponse `json:"error,omitempty"`
 }
 
+type CreateLoadRequestPayload struct {
+	Principal float64 `json:"principal"`
+}
+
 type CommonErrorResponse struct {
 	Message string `json:"message"`
 }

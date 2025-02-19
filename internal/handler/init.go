@@ -7,7 +7,7 @@ import (
 )
 
 type BillingUsecases interface {
-	CreateLoanUsecase(ctx context.Context) (*entity.ApiResponse, error)
+	CreateLoanUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
 }
 
 type UserUsecases interface {
