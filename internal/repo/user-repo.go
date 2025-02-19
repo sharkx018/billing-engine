@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (r *ResourceRepository) SignUp(ctx context.Context, user store.User) (int, error) {
+func (r *ResourceRepository) RegisterUser(ctx context.Context, user store.User) (int, error) {
 
 	logger.LogInfo(ctx, "User Sign Up Repo log")
 
@@ -26,4 +26,13 @@ func (r *ResourceRepository) SignUp(ctx context.Context, user store.User) (int, 
 	store.GlobalStore.Users[user.Mobile] = user
 
 	return user.UserID, nil
+}
+
+func (r *ResourceRepository) GetUserByMobile(ctx context.Context, mobile string) (store.User, bool) {
+
+	store.GlobalStore.Mu.Lock()
+	storedUser, exists := store.GlobalStore.Users[mobile]
+	store.GlobalStore.Mu.Unlock()
+
+	return storedUser, exists
 }

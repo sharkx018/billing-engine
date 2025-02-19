@@ -7,7 +7,8 @@ import (
 
 type ResourceRepo interface {
 	CreateLoan(ctx context.Context)
-	SignUp(ctx context.Context, user store.User) (int, error)
+	RegisterUser(ctx context.Context, user store.User) (int, error)
+	GetUserByMobile(ctx context.Context, mobile string) (store.User, bool)
 }
 
 type ResourceRepository struct{}

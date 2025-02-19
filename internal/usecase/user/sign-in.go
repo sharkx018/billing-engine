@@ -7,28 +7,26 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sharkx018/billing-engine/internal/constant"
 	"github.com/sharkx018/billing-engine/internal/entity"
-	"github.com/sharkx018/billing-engine/internal/logger"
 	"github.com/sharkx018/billing-engine/internal/store"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"time"
 )
 
-func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error) {
+func (uc UserUsecase) SignInUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error) {
 
 	var user store.User
 	json.NewDecoder(r.Body).Decode(&user)
 
-	userId, err := uc.userRepo.RegisterUser(ctx, user)
-	if err != nil {
-		return nil, err
+	storedUser, exists := uc.userRepo.GetUserByMobile(ctx, user.Mobile)
+
+	if !exists || bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password)) != nil {
+		return nil, fmt.Errorf("invalid credentials")
 	}
 
-	logger.LogInfo(ctx, fmt.Sprintf("RegisterUser userId: %v", userId))
-
-	// create the token
 	expirationTime := time.Now().Add(time.Hour * 24)
 	claims := &entity.Claims{
-		UserID: int(userId),
+		UserID: storedUser.UserID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -38,10 +36,11 @@ func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*enti
 
 	return &entity.ApiResponse{
 		Data: map[string]interface{}{
-			"message": "User registered successfully",
-			"userId":  int(userId),
+			"message": "User logged in successfully",
+			"userId":  storedUser.UserID,
 			"token":   tokenString,
 		},
 		Success: true,
 	}, nil
+
 }

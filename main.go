@@ -26,6 +26,7 @@ func main() {
 
 	// user-route
 	router.Post("/sign-up", handler.SignUpHandler)
+	router.Post("/sign-in", handler.SignInHandler)
 
 	// billing-route
 	router.Post("/create-loan", handler.CreateLoanHandler)

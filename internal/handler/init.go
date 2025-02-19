@@ -12,6 +12,7 @@ type BillingUsecases interface {
 
 type UserUsecases interface {
 	SignUpUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
+	SignInUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
 }
 
 type Handler struct {
