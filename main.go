@@ -24,9 +24,10 @@ func main() {
 
 	router := chi.NewRouter()
 
-	// user
+	// user-route
 	router.Post("/sign-up", handler.SignUpHandler)
 
+	// billing-route
 	router.Post("/create-loan", handler.CreateLoanHandler)
 
 	fmt.Printf("Billing Server Started at port %s\n", constant.ConfigPort)

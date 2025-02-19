@@ -1,13 +1,17 @@
 package handler
 
-import "context"
+import (
+	"context"
+	"github.com/sharkx018/billing-engine/internal/entity"
+	"net/http"
+)
 
 type BillingUsecases interface {
-	CreateLoanUsecase(ctx context.Context)
+	CreateLoanUsecase(ctx context.Context) (*entity.ApiResponse, error)
 }
 
 type UserUsecases interface {
-	SignUpUsecase(ctx context.Context)
+	SignUpUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
 }
 
 type Handler struct {
