@@ -1,23 +1,27 @@
 package handler
 
 import (
-	"context"
+	"fmt"
+	"github.com/sharkx018/billing-engine/internal/constant"
 	"github.com/sharkx018/billing-engine/internal/helper"
+	"github.com/sharkx018/billing-engine/internal/logger"
 	"net/http"
 )
 
 func (h *Handler) CreateLoanHandler(w http.ResponseWriter, r *http.Request) {
 
-	ctx := context.Background()
+	userID, ok := r.Context().Value(constant.USERID).(int)
+	if !ok {
+		helper.WriteCustomResp(w, http.StatusUnauthorized, "user is unauthorized")
+		http.Error(w, constant.Unauthorized, http.StatusUnauthorized)
+		return
+	}
+
+	ctx := r.Context()
+
+	logger.LogInfo(ctx, "Authorised user_id", userID)
+
 	h.billingUsecases.CreateLoanUsecase(ctx)
-	helper.WriteCustomResp(w, http.StatusOK, "Loan Created Successfully")
+	helper.WriteCustomResp(w, http.StatusOK, fmt.Sprintf("Loan Created Successfully for user_id: %d", userID))
 
 }
-
-//func (h *Handler) SignUpHandlersdfsd(w http.ResponseWriter, r *http.Request) {
-//
-//	ctx := context.Background()
-//	h.userUsecases.SignUpUsecase(ctx)
-//	helper.WriteCustomResp(w, http.StatusOK, "User Created Created Successfully")
-//
-//}
