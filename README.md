@@ -13,6 +13,7 @@ This is a billing engine for a loan management system that handles loan creation
 ```bash
   git clone https://github.com/sharkx018/billing-engine
   cd billing-engine
+  git checkout master
 ```
 
 2. **Install Dependencies**
