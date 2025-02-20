@@ -41,7 +41,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		// adding the check if the user-id exist in the store or not
 		if _, exists := store.GlobalStore.Users[userId]; !exists {
-			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
+			http.Error(w, "user_id does not exist in the store", http.StatusUnauthorized)
 			return
 		}
 		store.GlobalStore.Mu.Unlock()
