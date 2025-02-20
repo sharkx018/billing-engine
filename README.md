@@ -45,7 +45,7 @@ This is a billing engine for a loan management system that handles loan creation
     "password":"123"
 }
 ```
-- 
+
 - **Response:**
 ```json
 {
@@ -68,7 +68,7 @@ This is a billing engine for a loan management system that handles loan creation
     "password":"123"
 }
 ```
--
+
 - **Response:**
 ```json
 {
