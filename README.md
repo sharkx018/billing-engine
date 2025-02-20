@@ -25,7 +25,7 @@ This is a billing engine for a loan management system that handles loan creation
   go run main.go
 ```
 
-4. **Server will start on port 8080**
+4. **Server will start on port 3000**
 ```bash
   Cron job started for marking the missed payments
   Billing Server Started at port :3000
