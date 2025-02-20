@@ -11,8 +11,8 @@ This is a billing engine for a loan management system that handles loan creation
 ### Steps
 1. **Clone the Repository**
 ```bash
-  git clone <repository_url>
-  cd <repository_directory>
+  git clone https://github.com/sharkx018/billing-engine
+  cd billing-engine
 ```
 
 2. **Install Dependencies**
