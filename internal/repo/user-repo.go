@@ -17,15 +17,17 @@ func (r *ResourceRepository) RegisterUser(ctx context.Context, user store.User) 
 	store.GlobalStore.Mu.Lock()
 	defer store.GlobalStore.Mu.Unlock()
 
-	if _, exists := store.GlobalStore.Users[user.Mobile]; exists {
-		return -1, errors.New("user already exists")
+	for _, existingUser := range store.GlobalStore.Users {
+		if existingUser.Mobile == user.Mobile {
+			return -1, errors.New("user already exists")
+		}
 	}
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	user.UserID = len(store.GlobalStore.Users) + 1
 	user.Password = string(hashedPassword)
 
-	store.GlobalStore.Users[user.Mobile] = user
+	store.GlobalStore.Users[user.UserID] = user
 
 	return user.UserID, nil
 }
@@ -35,8 +37,16 @@ func (r *ResourceRepository) GetUserByMobile(ctx context.Context, mobile string)
 	// global in-memory store
 	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
-	storedUser, exists := store.GlobalStore.Users[mobile]
-	store.GlobalStore.Mu.Unlock()
+	var user store.User
+	var exists = false
 
-	return storedUser, exists
+	for _, existingUser := range store.GlobalStore.Users {
+		if existingUser.Mobile == mobile {
+			user = existingUser
+			exists = true
+		}
+	}
+
+	store.GlobalStore.Mu.Unlock()
+	return user, exists
 }

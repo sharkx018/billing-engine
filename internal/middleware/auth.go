@@ -38,13 +38,13 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		// global in-memory store
 		// locking the store to avoid the race-condition as this is the shared resource
 		store.GlobalStore.Mu.Lock()
-		defer store.GlobalStore.Mu.Unlock()
 
 		// adding the check if the user-id exist in the store or not
-		if _, exists := store.GlobalStore.Users[strconv.Itoa(userId)]; !exists {
+		if _, exists := store.GlobalStore.Users[userId]; !exists {
 			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
 			return
 		}
+		store.GlobalStore.Mu.Unlock()
 
 		// setting the user-id in the context
 		ctx := context.WithValue(r.Context(), constant.USERID, userId)

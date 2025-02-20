@@ -41,13 +41,13 @@ type EMIStatus string
 
 // Store struct to hold global variables
 type Store struct {
-	Users map[string]User
+	Users map[int]User
 	Loans map[int]Loan
 	Mu    sync.Mutex
 }
 
 // Global instance of store
 var GlobalStore = Store{
-	Users: make(map[string]User),
+	Users: make(map[int]User),
 	Loans: make(map[int]Loan),
 }

@@ -29,7 +29,7 @@ func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*enti
 	// create the jwt-token
 	expirationTime := time.Now().Add(time.Hour * 24)
 	claims := &entity.Claims{
-		UserID: int(userId),
+		UserID: userId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -41,7 +41,7 @@ func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*enti
 	return &entity.ApiResponse{
 		Data: map[string]interface{}{
 			"message": "User registered successfully",
-			"userId":  int(userId),
+			"userId":  userId,
 			"token":   tokenString,
 		},
 		Success: true,
