@@ -5,6 +5,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sharkx018/billing-engine/internal/constant"
 	"github.com/sharkx018/billing-engine/internal/entity"
+	"github.com/sharkx018/billing-engine/internal/store"
 	"net/http"
 	"strconv"
 )
@@ -15,12 +16,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		bypass := r.Header.Get("x-bypass")
 		userId, _ := strconv.Atoi(r.Header.Get("x-user-id"))
 
-		if bypass != "" {
-
-			ctx := context.WithValue(r.Context(), constant.USERID, userId)
-			next.ServeHTTP(w, r.WithContext(ctx))
-
-		} else {
+		if bypass == "" {
 
 			tokenString := r.Header.Get(constant.Authorization)
 			if tokenString == "" {
@@ -36,10 +32,22 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				http.Error(w, "Invalid token", http.StatusUnauthorized)
 				return
 			}
-
-			ctx := context.WithValue(r.Context(), constant.USERID, claims.UserID)
-			next.ServeHTTP(w, r.WithContext(ctx))
-
+			userId = claims.UserID
 		}
+
+		// global in-memory store
+		// locking the store to avoid the race-condition as this is the shared resource
+		store.GlobalStore.Mu.Lock()
+		defer store.GlobalStore.Mu.Unlock()
+
+		// adding the check if the user-id exist in the store or not
+		if _, exists := store.GlobalStore.Users[strconv.Itoa(userId)]; !exists {
+			http.Error(w, "Invalid user ID", http.StatusUnauthorized)
+			return
+		}
+
+		// setting the user-id in the context
+		ctx := context.WithValue(r.Context(), constant.USERID, userId)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
