@@ -33,6 +33,7 @@ func main() {
 	router.With(middleware.AuthMiddleware).Post("/create-loan", handler.CreateLoanHandler)
 	router.With(middleware.AuthMiddleware).Post("/make-payment", handler.MakePaymentHandler)
 	router.With(middleware.AuthMiddleware).Get("/is-delinquent", handler.IsDelinquentHandler)
+	router.With(middleware.AuthMiddleware).Get("/get-outstanding", handler.GetOutstandingHandler)
 
 	fmt.Printf("Billing Server Started at port %s\n", constant.ConfigPort)
 	err := http.ListenAndServe(constant.ConfigPort, router)

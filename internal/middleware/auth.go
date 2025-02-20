@@ -6,13 +6,14 @@ import (
 	"github.com/sharkx018/billing-engine/internal/constant"
 	"github.com/sharkx018/billing-engine/internal/entity"
 	"net/http"
+	"strconv"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		bypass := r.Header.Get("x-bypass")
-		userId := r.Header.Get("x-user-id")
+		userId, _ := strconv.Atoi(r.Header.Get("x-user-id"))
 
 		if bypass != "" {
 
