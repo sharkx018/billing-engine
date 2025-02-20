@@ -240,6 +240,11 @@ This is a billing engine for a loan management system that handles loan creation
 
 ---
 
+## Unit Testing
+- **Mockgen:** Unit tests for all usecases in the billing engine have been implemented using mockgen.
+
+---
+
 ## Edge Cases Handled
 - **Duplicate Payments:** Prevents paying an EMI that is already marked as `paid`.
 - **Invalid Loan or EMI Number:** Returns appropriate error messages for invalid loan IDs or EMI numbers.
