@@ -46,3 +46,14 @@ func (b *ResourceRepository) CreateLoan(ctx context.Context, userID int, payload
 
 	return store.GlobalStore.Loans[loanID], nil
 }
+
+func (b *ResourceRepository) GetLoanById(ctx context.Context, loanID int) (store.Loan, bool) {
+
+	loan, exists := store.GlobalStore.Loans[loanID]
+	return loan, exists
+}
+
+func (b *ResourceRepository) UpdateLoan(ctx context.Context, loan store.Loan) (store.Loan, error) {
+	store.GlobalStore.Loans[loan.LoanID] = loan
+	return loan, nil
+}

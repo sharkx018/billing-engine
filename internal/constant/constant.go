@@ -8,7 +8,7 @@ const (
 	Authorization = "Authorization"
 
 	InterestRate = 0.10
-	TotalWeeks   = 7
+	TotalWeeks   = 50
 )
 
 var JwtKey = []byte("my_secret_key")

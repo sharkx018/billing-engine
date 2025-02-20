@@ -14,6 +14,11 @@ type CreateLoadRequestPayload struct {
 	Principal float64 `json:"principal"`
 }
 
+type MakePaymentRequestPayload struct {
+	LoanID    int `json:"loan_id"`
+	EMINumber int `json:"emi_number"`
+}
+
 type CommonErrorResponse struct {
 	Message string `json:"message"`
 }
