@@ -9,7 +9,10 @@ import (
 )
 
 func (b *ResourceRepository) CreateLoan(ctx context.Context, userID int, payload entity.CreateLoadRequestPayload) (store.Loan, error) {
+	// global in-memory store
+	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
+
 	loanID := len(store.GlobalStore.Loans) + 1
 	principal := payload.Principal
 	interestRate := constant.InterestRate

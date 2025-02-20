@@ -29,6 +29,7 @@ func (h *Handler) SignUpHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) SignInHandler(w http.ResponseWriter, r *http.Request) {
 
+	// calling the usecase for the business logic
 	ctx := context.Background()
 	response, err := h.userUsecases.SignInUsecase(ctx, r)
 	if err != nil {

@@ -12,6 +12,8 @@ func (r *ResourceRepository) RegisterUser(ctx context.Context, user store.User) 
 
 	logger.LogInfo(ctx, "User Sign Up Repo log")
 
+	// global in-memory store
+	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
 	defer store.GlobalStore.Mu.Unlock()
 
@@ -30,6 +32,8 @@ func (r *ResourceRepository) RegisterUser(ctx context.Context, user store.User) 
 
 func (r *ResourceRepository) GetUserByMobile(ctx context.Context, mobile string) (store.User, bool) {
 
+	// global in-memory store
+	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
 	storedUser, exists := store.GlobalStore.Users[mobile]
 	store.GlobalStore.Mu.Unlock()

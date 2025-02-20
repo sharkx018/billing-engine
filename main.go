@@ -17,19 +17,17 @@ import (
 
 func main() {
 
-	logger.LogInfo(context.Background(), "Billing Engine! started")
-
 	//Cron job started
 	logger.LogInfo(context.Background(), "Cron job started for marking the missed payments", "")
 	go cron.RunCronJob()
 
+	// setting up the internals
 	dataSourceRepo := repo.NewResource()
-
 	billingUsecase := billing.NewBillingUsecase(dataSourceRepo)
 	userUsecase := user.NewUserUsecase(dataSourceRepo)
-
 	handler := handler.NewBillingHandler(userUsecase, billingUsecase)
 
+	// setting up the route
 	router := chi.NewRouter()
 
 	// user-route

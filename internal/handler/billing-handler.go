@@ -8,6 +8,7 @@ import (
 
 func (h *Handler) CreateLoanHandler(w http.ResponseWriter, r *http.Request) {
 
+	// calling the usecase for the business logic
 	ctx := r.Context()
 	response, err := h.billingUsecases.CreateLoanUsecase(ctx, r)
 
@@ -29,6 +30,7 @@ func (h *Handler) CreateLoanHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) MakePaymentHandler(w http.ResponseWriter, r *http.Request) {
 
+	// calling the usecase for the business logic
 	ctx := r.Context()
 	response, err := h.billingUsecases.MakePaymentUsecase(ctx, r)
 
@@ -50,6 +52,7 @@ func (h *Handler) MakePaymentHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) IsDelinquentHandler(w http.ResponseWriter, r *http.Request) {
 
+	// calling the usecase for the business logic
 	ctx := r.Context()
 	response, err := h.billingUsecases.IsDelinquentUsecase(ctx, r)
 
@@ -71,6 +74,7 @@ func (h *Handler) IsDelinquentHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetOutstandingHandler(w http.ResponseWriter, r *http.Request) {
 
+	// calling the usecase for the business logic
 	ctx := r.Context()
 	response, err := h.billingUsecases.GetOutstandingUsecase(ctx, r)
 

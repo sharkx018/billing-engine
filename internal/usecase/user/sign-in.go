@@ -18,12 +18,15 @@ func (uc UserUsecase) SignInUsecase(ctx context.Context, r *http.Request) (*enti
 	var user store.User
 	json.NewDecoder(r.Body).Decode(&user)
 
+	// checking if the user exists or not
 	storedUser, exists := uc.userRepo.GetUserByMobile(ctx, user.Mobile)
 
+	// if user does not exist or password is wrong return error
 	if !exists || bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password)) != nil {
 		return nil, fmt.Errorf("invalid credentials")
 	}
 
+	// create the jwt-token
 	expirationTime := time.Now().Add(time.Hour * 24)
 	claims := &entity.Claims{
 		UserID: storedUser.UserID,

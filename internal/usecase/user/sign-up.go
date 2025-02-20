@@ -15,6 +15,7 @@ import (
 
 func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error) {
 
+	// parsing the user request
 	var user store.User
 	json.NewDecoder(r.Body).Decode(&user)
 
@@ -25,7 +26,7 @@ func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*enti
 
 	logger.LogInfo(ctx, fmt.Sprintf("RegisterUser userId: %v", userId))
 
-	// create the token
+	// create the jwt-token
 	expirationTime := time.Now().Add(time.Hour * 24)
 	claims := &entity.Claims{
 		UserID: int(userId),
@@ -36,6 +37,7 @@ func (uc UserUsecase) SignUpUsecase(ctx context.Context, r *http.Request) (*enti
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(constant.JwtKey)
 
+	// return the response
 	return &entity.ApiResponse{
 		Data: map[string]interface{}{
 			"message": "User registered successfully",

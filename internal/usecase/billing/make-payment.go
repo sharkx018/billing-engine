@@ -12,16 +12,20 @@ import (
 
 func (uc BillingUsecase) MakePaymentUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error) {
 
+	// getting the user-id from auth-token
 	userID, ok := ctx.Value(constant.USERID).(int)
 	if !ok {
 		return nil, fmt.Errorf("user is unauthorized")
 	}
 
+	// parsing the body
 	var payload entity.MakePaymentRequestPayload
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		return nil, err
 	}
 
+	// global in-memory store
+	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
 	defer store.GlobalStore.Mu.Unlock()
 
@@ -30,12 +34,21 @@ func (uc BillingUsecase) MakePaymentUsecase(ctx context.Context, r *http.Request
 		return nil, fmt.Errorf("invalid loan ID or user mismatch")
 	}
 
+	// adding the validations
 	if payload.EMINumber < 1 || payload.EMINumber > len(loan.EMISchedule) {
 		return nil, fmt.Errorf("invalid EMI number")
-
 	}
 
 	emiIndex := payload.EMINumber - 1
+
+	// checking for the edge-case if any of the previous emi is not paid
+	for i := range emiIndex {
+		if loan.EMISchedule[i].Status != store.Paid {
+			return nil, fmt.Errorf("previous EMI is not paid")
+		}
+	}
+
+	// check the edge-case if the emi is already paid
 	if loan.EMISchedule[emiIndex].Status == store.Paid {
 		return nil, fmt.Errorf("emi already paid")
 	}

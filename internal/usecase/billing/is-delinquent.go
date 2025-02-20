@@ -11,11 +11,14 @@ import (
 
 func (uc *BillingUsecase) IsDelinquentUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error) {
 
+	// getting the user-id from the auth-token
 	userID, ok := ctx.Value(constant.USERID).(int)
 	if !ok {
 		return nil, fmt.Errorf("user is unauthorized")
 	}
 
+	// global in-memory store
+	// locking the store to avoid the race-condition as this is the shared resource
 	store.GlobalStore.Mu.Lock()
 	defer store.GlobalStore.Mu.Unlock()
 
@@ -39,6 +42,7 @@ func (uc *BillingUsecase) IsDelinquentUsecase(ctx context.Context, r *http.Reque
 		}
 	}
 
+	// returning the response
 	return &entity.ApiResponse{
 		Data: map[string]interface{}{
 			"message":       "Loan info is fetched for the user",

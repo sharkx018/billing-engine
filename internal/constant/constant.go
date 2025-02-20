@@ -9,6 +9,8 @@ const (
 
 	InterestRate = 0.10
 	TotalWeeks   = 50
+
+	CRON_MINUTES = 5
 )
 
 var JwtKey = []byte("my_secret_key")
