@@ -9,6 +9,7 @@ import (
 type BillingUsecases interface {
 	CreateLoanUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
 	MakePaymentUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
+	IsDelinquentUsecase(ctx context.Context, r *http.Request) (*entity.ApiResponse, error)
 }
 
 type UserUsecases interface {

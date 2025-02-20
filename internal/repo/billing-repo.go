@@ -52,6 +52,17 @@ func (b *ResourceRepository) GetLoanById(ctx context.Context, loanID int) (store
 	loan, exists := store.GlobalStore.Loans[loanID]
 	return loan, exists
 }
+func (b *ResourceRepository) GetLoanByUserId(ctx context.Context, userID int) ([]store.Loan, bool) {
+
+	var loans []store.Loan
+	for _, loan := range store.GlobalStore.Loans {
+		if loan.UserID == userID {
+			loans = append(loans, loan)
+		}
+	}
+
+	return loans, len(loans) > 0
+}
 
 func (b *ResourceRepository) UpdateLoan(ctx context.Context, loan store.Loan) (store.Loan, error) {
 	store.GlobalStore.Loans[loan.LoanID] = loan
